@@ -5,6 +5,7 @@
 #include "threadGuard.h"
 #include "scopedThread.h"
 #include "paralellAccumulate.h"
+#include "threadSafeStack.h"
 
 using namespace std;
 
@@ -126,8 +127,19 @@ int main(int, char**)
     //     ele.join();
 
     // Test parallelAccumulate
-    vector<int> v(100000,1);
-    cout << paralellAccumulate(v.begin(), v.end(), 0) << endl;
+    // vector<int> v(100000,1);
+    // cout << paralellAccumulate(v.begin(), v.end(), 0) << endl;
+
+
+    // ThreadSafeStack
+    threadSafeStack<int> s; 
+    try{s.pop();}
+    catch(emptyStack e){cout << e.what() << endl;}
+    s.push(5);
+    cout << s.top() << endl;
+
+    
+
 
 
     cout << "end of program" << endl;

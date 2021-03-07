@@ -6,11 +6,15 @@
 #include "scopedThread.h"
 #include "paralellAccumulate.h"
 #include "threadSafeStack.h"
+#include "waitingForData.h"
 
 using namespace std;
 
 // Passing memberfunction reference and reference to object
 // Similiar to std::bind.
+
+vector<int> WD::lotsOfData;
+
 class X
 {
     public:
@@ -132,15 +136,23 @@ int main(int, char**)
 
 
     // ThreadSafeStack
-    threadSafeStack<int> s; 
-    try{s.pop();}
-    catch(emptyStack e){cout << e.what() << endl;}
-    s.push(5);
-    cout << s.top() << endl;
+    // threadSafeStack<int> s; 
+    // try{s.pop();}
+    // catch(emptyStack e){cout << e.what() << endl;}
+    // s.push(5);
+    // cout << s.top() << endl;
 
     
+    // WaitingForData example
+    WD::lotsOfData = vector<int>(20,1);
 
+    thread dataPrepare(WD::prepDataThread);
+    thread dataProcess(WD::dataProcessingThread);    
 
+    dataPrepare.join();
+    dataProcess.join();
+    
+    WD::printOne();
 
     cout << "end of program" << endl;
 }
